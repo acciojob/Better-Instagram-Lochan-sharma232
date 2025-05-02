@@ -1,9 +1,9 @@
 //your code here
-function allowDrop(ev) {
+function allowDrop(event) {
 	ev.preventDefault();
   }
 
-function drag(ev) {
+function drag(event) {
 ev.dataTransfer.setData("text", ev.target.id);
 }
 
