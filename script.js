@@ -1,25 +1,45 @@
-document.getElementById("drag")
-.addEventListener("ondragstart",(event)=>{
-	console.log("Dragging started",event)
-})
-document.getElementById("div1")
-.addEventListener("ondrop",(event)=>{
-	console.log("Drop started",event)
-})
-document.getElementById("div1").addEventListener("ondragover",event=>{
-console.log("Dragging over",event)	
-})
-//your code here
-function allowDrop(event) {
-	ev.preventDefault();
+window.onload = function() {
+	let divs = document.querySelectorAll('.image');
+	for (let i = 0; i < divs.length; i++) {
+	  divs[i].setAttribute('id', 'div' + (i + 1));
+	  divs[i].addEventListener("dragstart", handleDragStart, false);
+	  divs[i].addEventListener("dragover", handleDragOver, false);
+	  divs[i].addEventListener("drop", handleDrop, false);
+	}
   }
-
-function drag(event) {
-ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  const data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
-}
+   
+  let dragSrcEl = null;
+   
+  function handleDragStart(e) {
+   
+	dragSrcEl = this;
+	e.dataTransfer.effectAllowed = 'move';
+  }
+   
+  function handleDragOver(e) {
+	if (e.preventDefault) {
+	  e.preventDefault();
+	}
+	e.dataTransfer.dropEffect = 'move';
+	return false;
+  }
+   
+  function handleDrop(e) {
+	if (e.stopPropagation) {
+	  e.stopPropagation();
+	}
+	if (dragSrcEl != this) {
+	  let parent = document.querySelector('#parent');
+	  let srcIndex = Array.prototype.indexOf.call(parent.children, dragSrcEl);
+	  let targetIndex = Array.prototype.indexOf.call(parent.children, this);
+	  if (srcIndex < targetIndex) {
+		parent.insertBefore(dragSrcEl, this.nextSibling);
+		parent.insertBefore(this, parent.children[srcIndex]);
+	  } else {
+		parent.insertBefore(this, dragSrcEl);
+		parent.insertBefore(dragSrcEl, parent.children[targetIndex]);
+	  }
+	}
+	return false;
+  }
+  
